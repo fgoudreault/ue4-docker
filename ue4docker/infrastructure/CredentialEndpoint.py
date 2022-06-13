@@ -93,5 +93,5 @@ class CredentialEndpoint(object):
         """
         handler = partial(CredentialRequestHandler, username, password, token)
 
-        server = HTTPServer(("0.0.0.0", 9876), RequestHandlerClass=handler)
+        server = HTTPServer(("0.0.0.0", 27017), RequestHandlerClass=handler)
         server.serve_forever()

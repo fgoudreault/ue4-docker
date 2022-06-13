@@ -9,7 +9,7 @@ FROM ${NAMESPACE}/ue4-source:${TAG}-${PREREQS_TAG} AS builder
 
 # Set the changelist number in Build.version to ensure our Build ID is generated correctly
 ARG CHANGELIST
-COPY set-changelist.py /tmp/set-changelist.py
+COPY --chown=ue4:ue4 set-changelist.py /tmp/set-changelist.py
 RUN python3 /tmp/set-changelist.py /home/ue4/UnrealEngine/Engine/Build/Build.version $CHANGELIST
 
 # Remove the .git directory to disable UBT `git status` calls and speed up the build process
@@ -17,16 +17,16 @@ RUN rm -rf /home/ue4/UnrealEngine/.git
 
 {% if (not disable_all_patches) and (not disable_opengl_patch) %}
 # Enable the OpenGL RHI for Engine versions where it is present but deprecated
-COPY enable-opengl.py /tmp/enable-opengl.py
+COPY --chown=ue4:ue4 enable-opengl.py /tmp/enable-opengl.py
 RUN python3 /tmp/enable-opengl.py /home/ue4/UnrealEngine/Engine/Config/BaseEngine.ini
 {% endif %}
 
 {% if (not disable_all_patches) and (not disable_buildgraph_patches) %}
-COPY patch-filters-xml.py /tmp/patch-filters-xml.py
+COPY --chown=ue4:ue4 patch-filters-xml.py /tmp/patch-filters-xml.py
 RUN python3 /tmp/patch-filters-xml.py /home/ue4/UnrealEngine/Engine/Build/InstalledEngineFilters.xml
 
 # Patch the default settings in InstalledEngineBuild.xml and increase the output verbosity of the DDC generation step
-COPY patch-build-graph.py /tmp/patch-build-graph.py
+COPY --chown=ue4:ue4 patch-build-graph.py /tmp/patch-build-graph.py
 RUN python3 /tmp/patch-build-graph.py /home/ue4/UnrealEngine/Engine/Build/InstalledEngineBuild.xml /home/ue4/UnrealEngine/Engine/Build/Build.version
 {% endif %}
 

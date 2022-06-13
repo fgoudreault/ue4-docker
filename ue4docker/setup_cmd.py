@@ -30,7 +30,7 @@ def _setupLinux():
                 "wget",
                 "--timeout=1",
                 "--post-data=dummy",
-                "http://{}:9876".format(NetworkUtils.hostIP()),
+                "http://{}:15000".format(NetworkUtils.hostIP()),
             ],
             check=True,
         )
@@ -45,7 +45,7 @@ def _setupLinux():
 
         # Create the firewall rule
         subprocess.run(
-            ["iptables", "-I", "INPUT", "-p", "tcp", "--dport", "9876", "-j", "ACCEPT"],
+            ["iptables", "-I", "INPUT", "-p", "tcp", "--dport", "15000", "-j", "ACCEPT"],
             check=True,
         )
 
@@ -131,7 +131,7 @@ def _setupWindowsServer():
                 "dir=in",
                 "action=allow",
                 "protocol=TCP",
-                "localport=9876",
+                "localport=15000",
             ],
             check=True,
         )
